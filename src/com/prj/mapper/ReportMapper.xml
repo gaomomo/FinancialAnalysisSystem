@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.prj.mapper.ReportMapper" >
+
+  <!-- 查询所有年报-->
+  <select id="selectAllReports" resultType="com.prj.bean.Report">
+  	select * from report
+  </select>
+  
+    <!-- 首页模糊查询年报信息 -->
+  <select id="selectColumnLike" parameterType="String" resultType="com.prj.bean.Report">
+  	 SELECT *
+  	 FROM report 
+  	  WHERE CONCAT(stock_code,stock_name,report_kind,report_year) LIKE concat('%',#{likeName},'%')	
+  </select>
+  
+  <!-- 根据年份、行业、板块三个选项中的其中几个查询年报表 -->
+  <select id="selectReportsByindustryAndblockAnd" resultType="com.prj.bean.Report" parameterType="com.prj.bean.Report">
+ 	SELECT * FROM report 
+  	<where> 
+	    <if test="report_industry != null">
+	         report_industry = #{report_industry}
+	    </if> 
+	    <if test="report_block != null">
+	        AND report_block = #{report_block}
+	    </if>
+	    <if test="report_year != null">
+	        AND report_year = #{report_year}
+	    </if>
+	 </where>
+  </select>
+	
+  <!-- 根据主键id查询一条年报信息 -->
+  <select id="selectByPrimaryKey" resultType="com.prj.bean.Report" parameterType="java.lang.Integer" >
+    select * from report
+    where report_id = #{report_id}
+  </select>
+  
+</mapper>
